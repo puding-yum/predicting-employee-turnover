@@ -3,6 +3,7 @@ import streamlit as st
 from sklearn import metrics
 import matplotlib.pyplot as plt
 import pandas as pd
+import pickle
 
 st.set_page_config(
     initial_sidebar_state="collapsed",
@@ -41,6 +42,8 @@ if 'file_name' in st.session_state:
         svm_model = SVC(C=10, gamma=0.1, kernel='rbf')
         svm_model.fit(X_train[:, selected_features], y_train)
         y_pred = svm_model.predict(X_test[:, selected_features])
+        pickle.dump(svm_model, open('./model/z-svm_model.pkl', 'wb'))
+
         st.session_state["y_test"] = y_test
         st.session_state["y_pred"] = y_pred
         

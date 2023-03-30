@@ -65,7 +65,47 @@ if 'file_name' in st.session_state:
         if st.button("Predict"):
             prediction(data_to_predict)
     else:
-        st.warning('Dataset not employee', icon="⚠️")
+        data_selected = st.session_state['data_selected']
+        dataset = st.session_state['dataset']
+        dataset = dataset[data_selected.columns]
+        data_type = dataset.dtypes
+
+        def prediction(row_data):
+            model = load(open('./model/z-svm_model.pkl', 'rb'))
+            for idx, column_type in enumerate(data_type):
+                if(idx == len(dataset.columns)-1):
+                    continue
+
+                if(column_type == "object"):
+                    encoder = load(open('./model/encode/z-{}.pkl'.format(dataset.columns[idx]), 'rb'))
+                    row_data[idx] = encoder.transform([row_data[idx]]) 
+                    
+                scaler = load(open('./model/scale/z-{}.pkl'.format(dataset.columns[idx]), 'rb'))
+                scaled = scaler.transform(np.array(row_data[idx]).reshape(-1,1))
+                row_data[idx] = scaled[0][0]
+            
+            predicted = model.predict([row_data])
+            if(predicted == 1):
+                st.write("Data diklasifikasikan ke dalam kelas positif")
+            else:
+                st.write("Data diklasifikasikan ke dalam  kelas negatif")
+
+        data_to_predict = []
+        for idx, column_type in enumerate(data_type):
+            if(idx == len(dataset.columns)-1):
+                continue
+
+            if(column_type == "object"):
+                options = sorted(dataset.iloc[:, idx].unique().tolist())
+                data_to_predict.append(st.radio("Pilih data {}!".format(dataset.columns[idx]), options=options, key=dataset.columns[idx]))
+            else:
+                min = dataset.iloc[:, idx].min()
+                max = dataset.iloc[:, idx].max()
+                data_to_predict.append(st.number_input("Isi data {}! (min = {}, max = {})".format(dataset.columns[idx], min, max), key=dataset.columns[idx], min_value=min, max_value=max))
+
+        if st.button("Predict"):
+            prediction(data_to_predict)
+        # st.warning('Dataset not employee', icon="⚠️")
 else:
     st.warning('Upload data first', icon="⚠️")
 

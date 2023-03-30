@@ -1,4 +1,5 @@
 import functools
+import pickle
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
@@ -51,6 +52,7 @@ elif 'dataset' in st.session_state:
         data_encoded = dataset.copy()
         for object in objectList:
             data_encoded[object] = le.fit_transform(data_encoded[object])
+            pickle.dump(le, open('./model/encode/z-{}.pkl'.format(object), 'wb'))
         st.session_state['data_encoded']=data_encoded
 
         # normalization
@@ -58,6 +60,7 @@ elif 'dataset' in st.session_state:
         data_normalized = data_encoded.copy()
         for column in data_normalized.columns:
             data_normalized[column] = scaler.fit_transform(data_normalized[column].values.reshape(-1,1))
+            pickle.dump(scaler, open('./model/scale/z-{}.pkl'.format(column), 'wb'))
         st.session_state['data_normalized']=data_normalized 
 
         X = data_normalized.drop(data_normalized.columns[-1],axis=1).values
