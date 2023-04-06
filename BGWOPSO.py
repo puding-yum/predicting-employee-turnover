@@ -53,6 +53,7 @@ class BGWOPSO:
             for i in range(self.num_particle):
                 score = self.fit_func(self.X[i, :])
 
+
                 if score < self.score_alpha:
                     # # ---EvoloPy ver.---
                     # self.score_delta = self.score_beta
@@ -79,34 +80,37 @@ class BGWOPSO:
                     self.score_delta = score.copy()
                     self.X_delta = self.X[i, :].copy()
 
-            a = 2 - 2 * self._iter / self.max_iter  # (8)
+            a = 2 - 2 * self._iter / self.max_iter  # (3.3)
             
 
             for i in range(self.num_particle):
                 r1 = np.random.uniform(size=[self.num_dim])
-                A1 = 2 * a * r1 - a  # (3)
-                D_alpha = np.abs(self.C1 * self.X_alpha - self.w * self.X[i, :])  # (19)
-                cstep_alpha = self.sigmoid(-1 * A1 * D_alpha)  # (18)
-                bstep_alpha = (cstep_alpha >= np.random.uniform(size=[self.num_dim])) * 1.0  # (17)
-                X1 = ((self.X_alpha + bstep_alpha) >= 1) * 1.0  # (16)
-                # print("X1")
-                # print(X1)
+                A1 = 2 * a * r1 - a  # (3.4)
+                D_alpha = np.abs(self.C1 * self.X_alpha - self.w * self.X[i, :])  # (3.7)
+                cstep_alpha = self.sigmoid(-1 * A1 * D_alpha)  # (3.11)
+                bstep_alpha = (cstep_alpha >= np.random.uniform(size=[self.num_dim])) * 1.0  # (3.10)
+                X1 = ((self.X_alpha + bstep_alpha) >= 1) * 1.0  # (3.9)
+                # if self._iter <= 5:
+                #     # print(self.X[i, :])
+                #     # print(score)
+                #     print("X1")
+                #     print(X1)
 
                 r1 = np.random.uniform(size=[self.num_dim])
-                A2 = 2 * a * r1 - a  # (3)
-                D_beta = np.abs(self.C2 * self.X_beta - self.w * self.X[i, :])  # (19)
-                cstep_beta = self.sigmoid(-1 * A2 * D_beta)  # (18)
-                bstep_beta = (cstep_beta >= np.random.uniform(size=[self.num_dim])) * 1.0  # (17)
-                X2 = ((self.X_beta + bstep_beta) >= 1) * 1.0  # (16)
+                A2 = 2 * a * r1 - a  # (3.4)
+                D_beta = np.abs(self.C2 * self.X_beta - self.w * self.X[i, :])  # (3.7)
+                cstep_beta = self.sigmoid(-1 * A2 * D_beta)  # (3.11)
+                bstep_beta = (cstep_beta >= np.random.uniform(size=[self.num_dim])) * 1.0  # (3.10)
+                X2 = ((self.X_beta + bstep_beta) >= 1) * 1.0  # (3.9)
                 # print("X2")
                 # print(X2)
 
                 r1 = np.random.uniform(size=[self.num_dim])
-                A3 = 2 * a * r1 - a  # (3)
-                D_delta = np.abs(self.C3 * self.X_delta - self.w * self.X[i, :])  # (19)
-                cstep_delta = self.sigmoid(-1 * A3 * D_delta)  # (18)
-                bstep_delta = (cstep_delta >= np.random.uniform(size=[self.num_dim])) * 1.0  # (17)
-                X3 = ((self.X_delta + bstep_delta) >= 1) * 1.0  # (16)
+                A3 = 2 * a * r1 - a  # (3.4)
+                D_delta = np.abs(self.C3 * self.X_delta - self.w * self.X[i, :])  # (3.7)
+                cstep_delta = self.sigmoid(-1 * A3 * D_delta)  # (3.11)
+                bstep_delta = (cstep_delta >= np.random.uniform(size=[self.num_dim])) * 1.0  # (3.10)
+                X3 = ((self.X_delta + bstep_delta) >= 1) * 1.0  # (3.9)
 
                 # with r
                 r1 = np.random.uniform(size=[self.num_dim])
@@ -116,15 +120,18 @@ class BGWOPSO:
                 self.V[i, :] = self.w * (self.V[i, :]
                     + self.C1 * r1 * (X1 - self.X[i, :])
                     + self.C2 * r2 * (X2 - self.X[i, :])
-                    + self.C3 * r3 * (X3 - self.X[i, :]))  # (20)
-                # print(self.V[i, :])
+                    + self.C3 * r3 * (X3 - self.X[i, :]))  # (3.8)
+                # if self._iter <= 5:
+                #     print(X1 - self.X[i, :])
+                #     print(self.V[i, :])
 
-                self.X[i, :] = (self.sigmoid((X1 + X2 + X3) / 3) + self.V[i, :])  # (21) + (14)
-                # print("a")
+                self.X[i, :] = (self.sigmoid((X1 + X2 + X3) / 3) + self.V[i, :])  # (3.13) + (3.12)
+                # if self._iter <= 5:
+                #     print(self.X[i, :])
 
-                self.X[i, :] = (self.X[i, :] >= np.random.uniform(size=[self.num_dim])) * 1.0  # (14)
-                # print("b")
-                # print(self.X[i, :])
+                self.X[i, :] = (self.X[i, :] >= np.random.uniform(size=[self.num_dim])) * 1.0  # (3.12)
+                # if self._iter <= 5:
+                #     print(self.X[i, :])
 
             # print('iter:', self._iter, ', score:', self.score_alpha)
             # print(self.X_alpha)
@@ -144,4 +151,4 @@ class BGWOPSO:
         plt.show()
 
     def sigmoid(self, x):
-        return 1 / (1 + np.exp(-10 * (x - 0.5)))  # (15)
+        return 1 / (1 + np.exp(-10 * (x - 0.5)))  # (3.14)

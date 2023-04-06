@@ -12,7 +12,7 @@ st.set_page_config(
 with st.container():
     col1, col2, col3 = st.columns(3)
     with col2:
-        st.image("unnes.png")
+        st.image("./images/unnes.png")
     
     st.markdown("<h3 style='text-align: center; width:100%'>Skripsi</h3>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center'>Penerapan Algoritma SVM dan BGWOPSO untuk Prediksi Employee Turnover</h2>", unsafe_allow_html=True)

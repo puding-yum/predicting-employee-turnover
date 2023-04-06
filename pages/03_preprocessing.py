@@ -66,7 +66,7 @@ elif 'dataset' in st.session_state:
         X = data_normalized.drop(data_normalized.columns[-1],axis=1).values
         y = data_normalized[data_normalized.columns[-1]].values
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=True, stratify=y)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=42, shuffle=True, stratify=y)
         st.session_state['X_train']=X_train
         st.session_state['X_test']=X_test
         st.session_state['y_train']=y_train
