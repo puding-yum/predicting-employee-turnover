@@ -18,17 +18,20 @@ st.markdown("<h1 style='text-align: center'>Prediksi</h1>", unsafe_allow_html=Tr
 if 'file_name' in st.session_state:
     file_name = st.session_state['file_name']
 
+    # check file name
     if file_name == "employee.csv":
         data_selected = st.session_state['data_selected']
         dataset = st.session_state['dataset']
         dataset = dataset[data_selected.columns]
 
+        # change data type   
         objList = ["Education", 'EnvironmentSatisfaction', "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel", "WorkLifeBalance"]
         for column in dataset.columns:
             if column in objList:
                 dataset[column] = dataset[column].astype("object")
         data_type = dataset.dtypes
 
+        # prediction
         def prediction(row_data):
             model = load(open('./model/svm_model.pkl', 'rb'))
             for idx, column_type in enumerate(data_type):
@@ -45,22 +48,35 @@ if 'file_name' in st.session_state:
             
             predicted = model.predict([row_data])
             if(predicted == 1):
-                st.write("Karyawan ini berpotensi meninggalkan perusahaan")
-            else:
-                st.write("Karyawan ini tidak berpotensi meninggalkan perusahaan")
+                st.success("**Karyawan ini berpotensi meninggalkan perusahaan**", icon="⚠️")
 
+            else:
+                st.success("**Karyawan ini tidak berpotensi meninggalkan perusahaan**", icon="✅")
+
+        # create form
         data_to_predict = []
+        default_value = dataset.iloc[1, :]
         for idx, column_type in enumerate(data_type):
             if(idx == len(dataset.columns)-1):
                 continue
 
             if(column_type == "object"):
                 options = sorted(dataset.iloc[:, idx].unique().tolist())
-                data_to_predict.append(st.radio("Pilih data {}!".format(dataset.columns[idx]), options=options, key=dataset.columns[idx]))
+                default_option = options.index(default_value[idx])
+                data_to_predict.append(st.radio(
+                    "Pilih data {}!".format(dataset.columns[idx]), 
+                    options=options, 
+                    index=default_option, 
+                    key=dataset.columns[idx]))
             else:
                 min = dataset.iloc[:, idx].min()
                 max = dataset.iloc[:, idx].max()
-                data_to_predict.append(st.number_input("Isi data {}! (min = {}, max = {})".format(dataset.columns[idx], min, max), key=dataset.columns[idx], min_value=min, max_value=max))
+                data_to_predict.append(st.number_input(
+                    "Isi data {}! (min = {}, max = {})".format(dataset.columns[idx], min, max), 
+                    key=dataset.columns[idx], 
+                    min_value=min, 
+                    max_value=max,
+                    value=default_value[idx]))
 
         if st.button("Predict"):
             prediction(data_to_predict)
@@ -86,9 +102,9 @@ if 'file_name' in st.session_state:
             
             predicted = model.predict([row_data])
             if(predicted == 1):
-                st.write("Data diklasifikasikan ke dalam kelas positif")
+                st.success("**Data diklasifikasikan ke dalam kelas positif**")
             else:
-                st.write("Data diklasifikasikan ke dalam  kelas negatif")
+                st.success("**Data diklasifikasikan ke dalam  kelas negatif**")
 
         data_to_predict = []
         for idx, column_type in enumerate(data_type):
@@ -105,12 +121,5 @@ if 'file_name' in st.session_state:
 
         if st.button("Predict"):
             prediction(data_to_predict)
-        # st.warning('Dataset not employee', icon="⚠️")
 else:
     st.warning('Upload data first', icon="⚠️")
-
-# st.write('''<style>
-# [data-testid="column"]:nth-child(2){
-#     padding: 2.5rem 0 0 0;
-# }
-# </style>''', unsafe_allow_html=True)

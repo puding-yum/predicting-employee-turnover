@@ -26,41 +26,41 @@ if file_name is not None:
         unique_value = dataset.nunique()
 
         description = [
-            "Umur",                                                                                                 #Age
-            "Frekuensi travel karyawan",                                                                            #BusinessTravel
-            "Gaji per hari",                                                                                        #DailyRate
-            "Departemen",                                                                                           #Department
-            "Jarak dari rumah",                                                                                     #DistanceFromHome
-            "Pendidikan (1=dibawah SMA, 2=SMA, 3=S1, 4=S2, 5=S3)",                                                  #Education
-            "Bidang pendidikan (1=HR, 2=LIFE SCIENCES, 3=MARKETING, 4=MEDICAL SCIENCES, 5=OTHERS, 6=TEHCNICAL)",    #EducationField
-            "",                                                                                                     #EmployeeCount                                 
-            "Nomor karyawan",                                                                                       #EmployeeNumber
-            "Kepuasan terhadap lingungan kerja",                                                                    #EnvironmentSatisfaction
-            "Jenis kelamin",                                                                                        #Gender
-            "Gaji per jam",                                                                                         #HourlyRate
-            "Keterlibatan kerja (1=Low, 2=Medium, 3=High, 4=Very High)",                                            #JobInvolvement
-            "Tingkat kesulitan kerja",                                                                              #JobLevel
-            "Tugas dalam kerja",                                                                                    #JobRole
-            "Tingkat kepuasan terhadap pekerjaan (1=Low, 2=Medium, 3=High, 4=Very High)",                           #JobSatisfaction
-            "Status pernikahan (1=pisah, 2=menikah, 3=single)",                                                     #MaritalStatus
-            "Gaji per bulan",                                                                                       #MonthlyIncome
-            "Pengeluaran internal per bulan",                                                                       #MonthlyRate
-            "Jumlah perusahaan yang pernah jadi tempat kerja",                                                      #NumCompaniesWorked
-            "Usia lebih dari 18 tahun",                                                                             #Over18
-            "Lembur",                                                                                               #OverTime
-            "Persentase kenaikan gaji dibanding tahun lalu",                                                        #PercentSalaryHike
-            "Rating performa (1=Low, 2=Good, 3=Excellent, 4=Outstanding)",                                          #PerformanceRating
-            "Kepuasan hubungan dengan rekan kerja (1=Low, 2=Medium, 3=High, 4=Very High)",                          #RelationshipSatisfaction
-            "Standar jam kerja",                                                                                    #StandardHours
-            "Level saham",                                                                                          #StockOptionLevel
-            "Lama kerja",                                                                                           #TotalWorkingYears
-            "Jumlah latihan tahun lalu",                                                                            #TrainingTimesLastYear
-            "Tingkat keseimbangan kerja dengan kehidupan sehari hari (1=Bad, 2=Good, 3=Better, 4=Best)",            #WorkLifeBalance
-            "Lama kerja dengan perusahaan",                                                                         #YearsAtCompany
-            "Lama kerja dengan tugas saat ini",                                                                     #YearsInCurrentRole
-            "Selisih tahun sejak terakhir mendapatkan promosi",                                                     #YearsSinceLastPromotion
-            "Lama kerja dengan manajer",                                                                            #YearsWithCurrManager
-            "Status karyawan meninggalkan perusahaan atau tidak",                                                   #Attrition
+            'Usia karyawan',
+            'Seberapa sering karyawan bepergian',
+            'Gaji per hari',
+            'Bidang pekerjaan',
+            'Jarak dari rumah ke tempat kerja',
+            'Tingkat pendidikan',
+            'Bidang pendidikan',
+            '',
+            'ID karyawan',
+            'Kepuasan terhadap lingkungan kerja',
+            'Jenis kelamin',
+            'Gaji per jam',
+            'Keterlibatan kerja',
+            'Tingkat kesulitan kerja',
+            'Tugas dalam kerja',
+            'Tingkat kepuasan terhadap pekerjaan',
+            'Status pernikahan',
+            'Gaji per bulan',
+            'Pengeluaran internal perusahaan per bulan',
+            'Jumlah perusahaan yang pernah jadi tempat kerja',
+            'Usia karyawan lebih dari 18 tahun atau tidak',
+            'Karyawan mengambil jam lembur atau tidak',
+            'Persentase kenaikan gaji dibanding tahun lalu',
+            'Performa karyawan',
+            'Tingkat kepuasan hubungan karyawan dengan rekan kerja',
+            'Standar jam kerja',
+            'Tingkat saham',
+            'Lama kerja',
+            'Jumlah latihan tahun lalu',
+            'Tingkat keseimbangan kerja dengan kehidupan sehari hari',
+            'Lama kerja dengan perusahaan',
+            'Lama kerja dengan tugas saat ini',
+            'Selisih tahun sejak terakhir mendapatkan promosi',
+            'Lama kerja dengan manajer saat ini',
+            'Status karyawan meninggalkan perusahaan atau tidak'
         ]
         data_type = [
             "numerik",          #Age
@@ -99,11 +99,6 @@ if file_name is not None:
             "numerik",          #YearsWithCurrManager
             "kategorikal",      #Attrition
         ] 
-
-        # print(len(unique_value))
-        # print(len(description))
-        # print(len(data_type))
-        # print(len(dataset.columns))
 
         data_description = pd.DataFrame({"Nama Fitur":dataset.columns, "Nilai Unik":unique_value, "Tipe Data":data_type, "Keterangan":description })
         data_description = data_description.reset_index(drop=True)

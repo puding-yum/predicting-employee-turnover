@@ -16,7 +16,7 @@ else:
     data_train = st.session_state['data_train']
     data_test = st.session_state['data_test']
 
-    tab1, tab2= st.tabs(["Data Train", "Data Testing"])
+    tab1, tab2= st.tabs(["Data Train (90%)", "Data Test (10%)"])
     with tab1:
         st.dataframe(data_train)
     with tab2:
