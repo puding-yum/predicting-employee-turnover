@@ -20,6 +20,44 @@ if 'file_name' in st.session_state:
 
     # check file name
     if file_name == "employee.csv":
+        form_title = [
+            # "Berapa usia karyawan?", #Age
+            "Seberapa sering karyawan melakukan trip bisnis?", #BusinessTravel
+            "Berapa gaji harian karyawan?", #DailyRate
+            "Apa departemen karyawan?", #Department
+            "Berapa jarak dari tempat tinggal karyawan ke kantor?", #DistanceFromHome
+            # "Apa tingkat pendidikan karyawan?", #Education
+            "Apa bidang pendidikan karyawan?", #EducationField
+            # "Berapa jumlah karyawan?", #EmployeeCount
+            "Berapa nomor ID karyawan?", #EmployeeNumber
+            "Seberapa puas karyawan terhadap lingkungan kerja?", #EnvironmentSatisfaction
+            "Apa jenis kelamin karyawan", #Gender
+            # "Berapa gaji perjam karyawan?", #HourlyRate
+            # "Seberapa besar karyawan terlibat dalam pekerjaan?", #JobInvolvement
+            "Apa tingkat pekerjaan karyawan?", #JobLevel
+            "Apa posisi karyawan?", #JobRole
+            "Seberapa puas karyawan terhadap pekerjaan?", #JobSatisfaction
+            "Apa status pernikahan karyawan?", #MaritalStatus
+            "Berapa gaji bulanan karyawan", #MonthlyIncome
+            "Berapa pengeluaran perusahaan perbulan untuk karyawan?", #MonthlyRate
+            "Berapa banyak perusahaan yang pernah menjadi tempat kerja karyawan?", #NumCompaniesWorked
+            # "Apakah usia karyawan melebihi 18?", #Over18
+            "Apakah karyawan mengambil jam lembur", #OverTime
+            "Berapa kenaikan gaji karyawan dalam persen?", #PercentSalaryHike
+            # "Seperti apa peringkat performa karyawan?", #PerformanceRating
+            "Seberapa puas hubungan karyawan dengan karyawan lain?", #RelationshipSatisfaction
+            # "Berapa standar jam kerja karyawan?", #StandardHours
+            "Apa pilihan tingkat stok saham karyawan?", #StockOptionLevel
+            "Berapa lama karyawan pernah bekerja?", #TotalWorkingYears
+            "Berapa jumlah pelatihan yang diambil karyawan tahun lalu?", #TrainingTimesLastYear
+            # "Seberapa seimbang hidup karyawan?", #WorkLifeBalance
+            # "Berapa lama karyawan bekerja di perusahaan ini?", #YearsAtCompany
+            "Berapa lama karyawan bekerja di posisi saat ini?", #YearsInCurrentRole
+            "Berapa lama selisih tahun terakhir karyawan mendapatkan promosi dengan tahun ini?", #YearsSinceLastPromotion
+            "Berapa lama karyawan bekerja dengan manajer saat ini?", #YearsWithCurrManager
+            "Apakah karyawan meninggalkan perusahaan?", #Attrition
+        ] 
+
         data_selected = st.session_state['data_selected']
         dataset = st.session_state['dataset']
         dataset = dataset[data_selected.columns]
@@ -55,7 +93,7 @@ if 'file_name' in st.session_state:
 
         # create form
         data_to_predict = []
-        default_value = dataset.iloc[1, :]
+        default_value = dataset.iloc[0, :]
         for idx, column_type in enumerate(data_type):
             if(idx == len(dataset.columns)-1):
                 continue
@@ -64,7 +102,7 @@ if 'file_name' in st.session_state:
                 options = sorted(dataset.iloc[:, idx].unique().tolist())
                 default_option = options.index(default_value[idx])
                 data_to_predict.append(st.radio(
-                    "Pilih data {}!".format(dataset.columns[idx]), 
+                    "{}".format(form_title[idx]), 
                     options=options, 
                     index=default_option, 
                     key=dataset.columns[idx]))
@@ -72,7 +110,7 @@ if 'file_name' in st.session_state:
                 min = dataset.iloc[:, idx].min()
                 max = dataset.iloc[:, idx].max()
                 data_to_predict.append(st.number_input(
-                    "Isi data {}! (min = {}, max = {})".format(dataset.columns[idx], min, max), 
+                    "{} (min = {}, max = {})".format(form_title[idx], min, max), 
                     key=dataset.columns[idx], 
                     min_value=min, 
                     max_value=max,

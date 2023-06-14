@@ -38,10 +38,25 @@ elif 'dataset' in st.session_state:
         
         st.session_state['data_train'] = data_train
         st.session_state['data_test'] = data_test
-        st.session_state['data_selected']=data_selected
+        st.session_state['data_selected']= data_selected
     else:
         # data cleaning
-        data_cleaned = dataset.dropna()
+        data_cleaned = dataset.copy()
+        data_type = data_cleaned.dtypes
+        data_cleaned = data_cleaned[data_cleaned[data_cleaned.columns[len(data_cleaned.columns)-1]].notna()]
+        print(data_cleaned)
+        for idx, column in enumerate(data_cleaned.columns):
+            print(data_cleaned[column].mode()[0])
+            data_cleaned[column] = data_cleaned[column].fillna(data_cleaned[column].mode()[0])
+            # print(data_cleaned[column].fillna(data_cleaned[column].mode()))
+            # # print(len(data_cleaned.columns)-1, idx)
+            # if idx == len(data_cleaned.columns)-1:
+            #     # print(column)
+            # else:
+            # print(idx)
+            # print(data_cleaned)
+                
+
         st.session_state['data_cleaned'] = data_cleaned
     
         # label encoder
@@ -49,7 +64,7 @@ elif 'dataset' in st.session_state:
         nonObjectList = data_cleaned.select_dtypes(exclude="object").columns.to_list()
 
         le = LabelEncoder()
-        data_encoded = dataset.copy()
+        data_encoded = data_cleaned.copy()
         for object in objectList:
             data_encoded[object] = le.fit_transform(data_encoded[object])
             pickle.dump(le, open('./model/encode/z-{}.pkl'.format(object), 'wb'))

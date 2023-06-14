@@ -29,7 +29,7 @@ if 'file_name' in st.session_state:
 
         accuaracy = round(accuracy_score(y_test,y_pred)*100, 2)
         precision = round(precision_score(y_test, y_pred)*100, 2)
-        sensifity = round(recall_score(y_test, y_pred)*100, 2)
+        sensitivity = round(recall_score(y_test, y_pred)*100, 2)
         f1 = round(f1_score(y_test, y_pred)*100, 2)
         specificity = round(tn/(tn+fp)*100, 2)
 
@@ -37,11 +37,11 @@ if 'file_name' in st.session_state:
         with col1:
             st.image(image, caption=None)
         with col2:
-            st.write("Accuracy = %.2f" % accuaracy)
-            st.write("Precision = %.2f" % precision)
-            st.write("Recall / Sensifity = %.2f" % sensifity)
-            st.write("F1 = %.2f" % f1)
-            st.write("Specificity = %.2f" % specificity)
+            st.write("Accuracy = {}%".format(accuaracy))
+            st.write("Precision = {}%".format(precision))
+            st.write("Sensitivity = {}%".format(sensitivity))
+            st.write("F1 Score = {}%".format(f1))
+            # st.write("Specificity = %.2f" % specificity)
     else:
         st.warning('Evaluasi data first', icon="⚠️")
 else:
